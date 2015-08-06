@@ -17,18 +17,11 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->getDoctrine()->getManager()->persist($report);
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', $this->trans('report.created.success', array(), 'report'));
-
-            return $this->redirect($this->generateUrl('report_index', array(
-                'site_id' => $site->getId(),
-            )));
+            // w/e we never get there.
         }
 
         return array(
             'form'   => $form->createView(),
-            'report' => $report,
         );
     }
 }
