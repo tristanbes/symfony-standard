@@ -13,9 +13,22 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-        ));
+        $form = $this->createForm($this->get('bug_report_form'));
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $this->getDoctrine()->getManager()->persist($report);
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', $this->trans('report.created.success', array(), 'report'));
+
+            return $this->redirect($this->generateUrl('report_index', array(
+                'site_id' => $site->getId(),
+            )));
+        }
+
+        return array(
+            'form'   => $form->createView(),
+            'report' => $report,
+        );
     }
 }
